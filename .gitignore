@@ -7,3 +7,5 @@ dist/
 build/
 .idea/
 .vscode/
+#for github upload
+finrobot_repo/

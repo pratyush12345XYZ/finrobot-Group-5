@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>finrobot (group 2)</title>
-    <!-- Modern Typography -->
+    <title>finrobot (group 5)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
     <div id="loading-overlay" class="loading-overlay active">
@@ -22,40 +20,43 @@
         <header class="app-header glass-panel">
             <div class="brand">
                 <div class="logo-orb"></div>
-                <h1>finrobot <span class="gradient-text">(group 2)</span></h1>
+                <h1>finrobot <span class="gradient-text">(group 5)</span></h1>
             </div>
             <div class="controls">
                 <div class="control-box">
                     <label for="company-select">Asset</label>
-                    <select id="company-select" disabled>
-                        <option value="">Loading...</option>
-                    </select>
+                    <select id="company-select" disabled><option value="">Loading...</option></select>
                 </div>
                 <div class="control-box">
                     <label for="mode-select">Horizon</label>
                     <select id="mode-select">
                         <option value="daily">Daily (Last 10 Days)</option>
-                        <option value="intraday">Intraday (30m Intervals)</option>
+                        <option value="intraday">Intraday (15m Intervals)</option>
                     </select>
                 </div>
-
-                <button id="analyze-btn" class="glow-btn">
-                    <span>Analyze</span>
-                </button>
+                <button id="analyze-btn" class="glow-btn"><span>Analyze</span></button>
+                <button id="settings-btn" class="settings-btn" title="About Project">⚙️</button>
             </div>
         </header>
 
         <main class="dashboard-grid">
+            <!-- LEFT: Chart -->
             <div class="chart-container glass-panel">
                 <div class="panel-header">
                     <h2 id="chart-title">Market Overview</h2>
-                    <div id="chart-indicator" class="status-dot"></div>
+                    <div class="chart-header-right">
+                        <div id="chart-indicator" class="status-dot"></div>
+                        <button id="pred-analysis-btn" class="pred-analysis-btn" style="display:none;">
+                            🔍 Prediction Analysis
+                        </button>
+                    </div>
                 </div>
                 <div class="canvas-wrapper">
                     <canvas id="marketChart"></canvas>
                 </div>
             </div>
 
+            <!-- RIGHT: Insights -->
             <div class="insights-container">
                 <div class="insight-card glass-panel prediction-card">
                     <div class="card-icon"></div>
@@ -63,79 +64,130 @@
                     <div class="insight-value" id="ai-prediction">--</div>
                     <p class="subtitle">Predicted Direction</p>
                 </div>
-                
                 <div class="insight-card glass-panel confidence-card">
                     <div class="card-icon"></div>
                     <h3>Confidence</h3>
                     <div class="insight-value" id="ai-confidence">--%</div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="confidence-bar"></div>
-                    </div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" id="confidence-bar"></div></div>
                 </div>
-
-                <!-- Rule Engine Decision -->
-                <div class="insight-card glass-panel engine-card">
-                    <h3>Rule Engine Signal</h3>
-                    <div class="insight-value" id="engine-decision">--</div>
-                    <div class="engine-meta">
-                        <span class="subtitle">Score: <strong id="engine-score">0</strong></span>
-                        <span class="subtitle">Confidence: <strong id="engine-confidence">0%</strong></span>
+                <!-- Methods Toggle -->
+                <button id="methods-toggle-btn" class="glow-btn" style="width: 100%; margin: 4px 0 10px 0; padding: 10px; font-size: 0.9rem;">
+                    <span>Methods ▼</span>
+                </button>
+                <div id="methods-section" style="display: none; flex-direction: column; gap: 20px; width: 100%;">
+                    <div class="insight-card glass-panel engine-card">
+                        <h3>Rule Engine Signal</h3>
+                        <div class="insight-value" id="engine-decision">--</div>
+                        <div class="engine-meta">
+                            <span class="subtitle">Score: <strong id="engine-score">0</strong></span>
+                            <span class="subtitle">Confidence: <strong id="engine-confidence">0%</strong></span>
+                        </div>
+                        <p class="subtitle" style="margin-top:4px;font-size:0.75rem;opacity:0.6;">Deterministic · No AI</p>
                     </div>
-                    <p class="subtitle" style="margin-top:4px; font-size:0.75rem; opacity:0.6;">Deterministic · No AI</p>
-                </div>
-
-                <!-- Technical Indicators -->
-                <div class="insight-card glass-panel technicals-card">
-                    <h3>Technical Indicators</h3>
-                    <div class="tech-grid">
-                        <div class="tech-item">
-                            <span class="tech-label">RSI</span>
-                            <span class="tech-value" id="tech-rsi">--</span>
-                        </div>
-                        <div class="tech-item">
-                            <span class="tech-label">MA</span>
-                            <span class="tech-value" id="tech-ma">--</span>
-                        </div>
-                        <div class="tech-item">
-                            <span class="tech-label">Volatility</span>
-                            <span class="tech-value" id="tech-volatility">--</span>
-                        </div>
-                        <div class="tech-item">
-                            <span class="tech-label">Trend</span>
-                            <span class="tech-value" id="tech-trend">--</span>
+                    <div class="insight-card glass-panel technicals-card">
+                        <h3>Technical Indicators</h3>
+                        <div class="tech-grid">
+                            <div class="tech-item"><span class="tech-label">RSI</span><span class="tech-value" id="tech-rsi">--</span></div>
+                            <div class="tech-item"><span class="tech-label">MA</span><span class="tech-value" id="tech-ma">--</span></div>
+                            <div class="tech-item"><span class="tech-label">Volatility</span><span class="tech-value" id="tech-volatility">--</span></div>
+                            <div class="tech-item"><span class="tech-label">Trend</span><span class="tech-value" id="tech-trend">--</span></div>
                         </div>
                     </div>
                 </div>
-
-                <div class="insight-card glass-panel prediction-card" id="next-price-card" style="display: none;">
+                <div class="insight-card glass-panel prediction-card" id="next-price-card" style="display:none;">
                     <div class="card-icon"></div>
-                    <h3>Next 30m Target</h3>
+                    <h3>Next 15m Target</h3>
                     <div class="insight-value" id="ai-next-price">--</div>
                     <p class="subtitle">Predicted Intra-Day Price</p>
                 </div>
-
-                <div class="insight-card glass-panel prediction-card" id="closing-price-card" style="display: none;">
+                <div class="insight-card glass-panel prediction-card" id="closing-price-card" style="display:none;">
                     <div class="card-icon"></div>
                     <h3>Daily Close</h3>
                     <div class="insight-value" id="ai-closing-price">--</div>
                     <p class="subtitle">Predicted Final Price</p>
                 </div>
-
                 <div class="insight-card glass-panel analysis-card">
                     <div class="card-icon"></div>
                     <h3>FinRobot Intelligence</h3>
-                    <p class="analysis-text" id="ai-explanation">
-                        Select a market asset to initiate deep learning analysis and generate trading insights.
-                    </p>
+                    <p class="analysis-text" id="ai-explanation">Select a market asset to initiate deep learning analysis.</p>
                 </div>
-                
                 <div class="disclaimer-text">
-                    <strong>Disclaimer:</strong> This stock price prediction is generated by AI and is strictly not guaranteed. Do not use for actual financial trading.
+                    <strong>Disclaimer:</strong> AI predictions are not guaranteed. Do not use for actual financial trading.
                 </div>
             </div>
         </main>
     </div>
 
-    <script src="app.js"></script>
+    <!-- ===== PREDICTION ANALYSIS MODAL ===== -->
+    <div id="pred-modal" class="pred-modal-backdrop" style="display:none;">
+        <div class="pred-modal-content glass-panel">
+            <div class="pred-modal-header">
+                <div>
+                    <h2>🔍 Prediction Analysis</h2>
+                    <p class="subtitle" id="pred-modal-subtitle">Actual vs Predicted · 15-min intervals</p>
+                </div>
+                <button id="pred-modal-close" class="modal-close-btn">✕</button>
+            </div>
+            <div class="pred-modal-legend">
+                <span class="legend-dot" style="background:#10b981;"></span><span class="legend-label">Actual Price</span>
+                <span class="legend-dot" style="background:transparent;border:2px dashed #8b5cf6;"></span><span class="legend-label">Predicted Price</span>
+            </div>
+            <div class="pred-modal-chart-wrapper">
+                <canvas id="predictionModalChart"></canvas>
+            </div>
+            <p class="modal-note">📌 Click a completed interval button below to view evaluation metrics</p>
+            <div id="modal-time-buttons" class="time-buttons"></div>
+            <div id="modal-metrics" class="metrics-display" style="display:none;">
+                <div class="metric-block">
+                    <span class="metric-label">⏱ Interval</span>
+                    <span class="metric-value neutral" id="mm-interval">--</span>
+                </div>
+                <div class="metric-block">
+                    <span class="metric-label">📈 Actual Price</span>
+                    <span class="metric-value" id="mm-actual">--</span>
+                </div>
+                <div class="metric-block">
+                    <span class="metric-label">🤖 Predicted</span>
+                    <span class="metric-value" id="mm-predicted">--</span>
+                </div>
+                <div class="metric-block">
+                    <span class="metric-label">⚠ Abs. Error</span>
+                    <span class="metric-value" id="mm-error">--</span>
+                </div>
+                <div class="metric-block">
+                    <span class="metric-label">📐 R² Score</span>
+                    <span class="metric-value" id="mm-r2">--</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ABOUT / PROJECT MODAL ===== -->
+    <div id="about-modal" class="pred-modal-backdrop" style="display:none;">
+        <div class="pred-modal-content glass-panel" style="max-width: 500px;">
+            <div class="pred-modal-header">
+                <div>
+                    <h2>ℹ️ Project Information</h2>
+                </div>
+                <button id="about-modal-close" class="modal-close-btn">✕</button>
+            </div>
+            <div style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+                <p style="margin-bottom: 20px; font-weight: 500; color: #fff;">
+                    This is a mini project done under the supervision of Dr. Ambikaprasad Mishra.
+                </p>
+                <p style="margin-bottom: 8px;"><strong>The project was done by:</strong></p>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 5px;">• 23053320 - Pratyush Kumar Mohanty</li>
+                    <li style="margin-bottom: 5px;">• 23053130 - Kashish Logani</li>
+                    <li style="margin-bottom: 5px;">• 23052140 - Anurag Patra</li>
+                    <li style="margin-bottom: 5px;">• 23052973 - Mahek Sharma</li>
+                    <li style="margin-bottom: 5px;">• 23052993 - Sanjana Sahu</li>
+                    <li style="margin-bottom: 5px;">• 23053075 - Sambhab Pattanaik</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js?v=6"></script>
 </body>
 </html>

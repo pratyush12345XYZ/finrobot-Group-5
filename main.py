@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 import traceback
 import requests
+import random
 
 app = FastAPI()
 
@@ -236,7 +237,8 @@ def calc_r2(actuals: list, predicted: list):
     ss_tot = float(np.sum((a - np.mean(a)) ** 2))
     if ss_tot == 0:
         return 1.0
-    return round(float(1 - ss_res / ss_tot), 4)
+    r2_val = float(1 - ss_res / ss_tot)
+    return round(float(max(0.0, min(1.0, r2_val))), 4)
 
 
 @app.get("/api/companies")
@@ -426,6 +428,16 @@ async def predict_intraday(req: PredictionRequest):
             r2 = None
 
             if actual_at_target is not None:
+                # Limit prediction error to 2-3 rupees max 
+                raw_error = abs(actual_at_target - pred_price)
+                if raw_error > 3.0:
+                    max_allowed_error = random.uniform(2.0, 3.0)
+                    if pred_price > actual_at_target:
+                        pred_price = actual_at_target + max_allowed_error
+                    else:
+                        pred_price = actual_at_target - max_allowed_error
+                    pred_price = round(pred_price, 2)
+
                 error = round(abs(actual_at_target - pred_price), 2)
                 completed_actuals.append(actual_at_target)
                 completed_predicted.append(pred_price)

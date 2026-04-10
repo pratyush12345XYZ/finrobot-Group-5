@@ -23,9 +23,9 @@ def determine_trend(prices: list, ma: float) -> str:
     if len(prices) < 2:
         return "sideways"
     last_price = prices[-1]
-    if last_price > ma * 1.005:
+    if last_price > ma * 1.001:
         return "up"
-    elif last_price < ma * 0.995:
+    elif last_price < ma * 0.999:
         return "down"
     else:
         return "sideways"
@@ -93,7 +93,7 @@ def rule_engine(price_change: float, rsi: float, trend: str, volatility: float) 
         decision = "HOLD"
 
     # Confidence
-    confidence = abs(score) * 2
+    confidence = max(15, abs(score) * 2)
     if confidence > 100:
         confidence = 100
 

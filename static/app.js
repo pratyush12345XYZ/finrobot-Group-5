@@ -11,6 +11,8 @@ const elements = {
     aiPrediction:     document.getElementById('ai-prediction'),
     aiConfidence:     document.getElementById('ai-confidence'),
     confidenceBar:    document.getElementById('confidence-bar'),
+    engineConfidenceMain: document.getElementById('engine-confidence-main'),
+    engineConfidenceBar:  document.getElementById('engine-confidence-bar'),
     aiExplanation:    document.getElementById('ai-explanation'),
     nextPriceCard:    document.getElementById('next-price-card'),
     aiNextPrice:      document.getElementById('ai-next-price'),
@@ -202,7 +204,9 @@ function renderIntradayActualOnly(data, isUp) {
 function openPredictionModal() {
     if (!lastIntradayData) return;
     const data = lastIntradayData;
-    elements.predModalSub.textContent = `${data.today_date} · Actual vs Predicted · 15-min intervals`;
+    const sel = elements.companySelect;
+    const companyName = sel.options[sel.selectedIndex].text;
+    elements.predModalSub.textContent = `${companyName} · ${data.today_date} · Actual vs Predicted · 15-min intervals`;
     elements.predModal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
 
@@ -360,6 +364,10 @@ function updateRuleEngine(e) {
     elements.engineDecision.classList.add(e.decision.toLowerCase());
     elements.engineScore.textContent = e.score;
     elements.engineConfidence.textContent = e.confidence+'%';
+    if (elements.engineConfidenceMain) {
+        animateValue(elements.engineConfidenceMain, 0, e.confidence, 1000, '%');
+        elements.engineConfidenceBar.style.width = `${e.confidence}%`;
+    }
 }
 function updateTechnicals(t) {
     elements.techRsi.textContent = t.rsi;

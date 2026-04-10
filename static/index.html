@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>finrobot (group 5)</title>
+    <title>FINBOT – FinRobot AI Trading</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css?v=6">
 </head>
+
 <body>
     <div id="loading-overlay" class="loading-overlay active">
         <div class="spinner"></div>
@@ -20,12 +22,14 @@
         <header class="app-header glass-panel">
             <div class="brand">
                 <div class="logo-orb"></div>
-                <h1>finrobot <span class="gradient-text">(group 5)</span></h1>
+                <h1>FINBOT <span class="gradient-text">– FinRobot AI Trading</span></h1>
             </div>
             <div class="controls">
                 <div class="control-box">
                     <label for="company-select">Asset</label>
-                    <select id="company-select" disabled><option value="">Loading...</option></select>
+                    <select id="company-select" disabled>
+                        <option value="">Loading...</option>
+                    </select>
                 </div>
                 <div class="control-box">
                     <label for="mode-select">Horizon</label>
@@ -67,11 +71,34 @@
                 <div class="insight-card glass-panel confidence-card">
                     <div class="card-icon"></div>
                     <h3>Confidence</h3>
-                    <div class="insight-value" id="ai-confidence">--%</div>
-                    <div class="progress-bar-bg"><div class="progress-bar-fill" id="confidence-bar"></div></div>
+
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4px; margin-top: 5px;">
+                        <span class="subtitle" style="font-size: 0.85rem; margin: 0; color: #a78bfa;">Math
+                            Calculated</span>
+                        <span class="insight-value" id="engine-confidence-main"
+                            style="font-size: 1.4rem; line-height: 1; color: #a78bfa;">--%</span>
+                    </div>
+                    <div class="progress-bar-bg" style="margin-bottom: 12px; height: 6px;">
+                        <div class="progress-bar-fill" id="engine-confidence-bar"
+                            style="background: linear-gradient(90deg, #8b5cf6, #c084fc);"></div>
+                    </div>
+
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4px;">
+                        <span class="subtitle" style="font-size: 0.85rem; margin: 0; color: #38bdf8;">AI Forecast
+                            (LLM)</span>
+                        <span class="insight-value" id="ai-confidence"
+                            style="font-size: 1.4rem; line-height: 1; color: #38bdf8;">--%</span>
+                    </div>
+                    <div class="progress-bar-bg" style="height: 6px;">
+                        <div class="progress-bar-fill" id="confidence-bar"
+                            style="background: linear-gradient(90deg, #0ea5e9, #38bdf8);"></div>
+                    </div>
                 </div>
                 <!-- Methods Toggle -->
-                <button id="methods-toggle-btn" class="glow-btn" style="width: 100%; margin: 4px 0 10px 0; padding: 10px; font-size: 0.9rem;">
+                <button id="methods-toggle-btn" class="glow-btn"
+                    style="width: 100%; margin: 4px 0 10px 0; padding: 10px; font-size: 0.9rem;">
                     <span>Methods ▼</span>
                 </button>
                 <div id="methods-section" style="display: none; flex-direction: column; gap: 20px; width: 100%;">
@@ -82,15 +109,20 @@
                             <span class="subtitle">Score: <strong id="engine-score">0</strong></span>
                             <span class="subtitle">Confidence: <strong id="engine-confidence">0%</strong></span>
                         </div>
-                        <p class="subtitle" style="margin-top:4px;font-size:0.75rem;opacity:0.6;">Deterministic · No AI</p>
+                        <p class="subtitle" style="margin-top:4px;font-size:0.75rem;opacity:0.6;">Deterministic · No AI
+                        </p>
                     </div>
                     <div class="insight-card glass-panel technicals-card">
                         <h3>Technical Indicators</h3>
                         <div class="tech-grid">
-                            <div class="tech-item"><span class="tech-label">RSI</span><span class="tech-value" id="tech-rsi">--</span></div>
-                            <div class="tech-item"><span class="tech-label">MA</span><span class="tech-value" id="tech-ma">--</span></div>
-                            <div class="tech-item"><span class="tech-label">Volatility</span><span class="tech-value" id="tech-volatility">--</span></div>
-                            <div class="tech-item"><span class="tech-label">Trend</span><span class="tech-value" id="tech-trend">--</span></div>
+                            <div class="tech-item"><span class="tech-label">RSI</span><span class="tech-value"
+                                    id="tech-rsi">--</span></div>
+                            <div class="tech-item"><span class="tech-label">MA</span><span class="tech-value"
+                                    id="tech-ma">--</span></div>
+                            <div class="tech-item"><span class="tech-label">Volatility</span><span class="tech-value"
+                                    id="tech-volatility">--</span></div>
+                            <div class="tech-item"><span class="tech-label">Trend</span><span class="tech-value"
+                                    id="tech-trend">--</span></div>
                         </div>
                     </div>
                 </div>
@@ -109,10 +141,12 @@
                 <div class="insight-card glass-panel analysis-card">
                     <div class="card-icon"></div>
                     <h3>FinRobot Intelligence</h3>
-                    <p class="analysis-text" id="ai-explanation">Select a market asset to initiate deep learning analysis.</p>
+                    <p class="analysis-text" id="ai-explanation">Select a market asset to initiate deep learning
+                        analysis.</p>
                 </div>
                 <div class="disclaimer-text">
-                    <strong>Disclaimer:</strong> AI predictions are not guaranteed. Do not use for actual financial trading.
+                    <strong>Disclaimer:</strong> AI predictions are not guaranteed. Do not use for actual financial
+                    trading.
                 </div>
             </div>
         </main>
@@ -129,8 +163,10 @@
                 <button id="pred-modal-close" class="modal-close-btn">✕</button>
             </div>
             <div class="pred-modal-legend">
-                <span class="legend-dot" style="background:#10b981;"></span><span class="legend-label">Actual Price</span>
-                <span class="legend-dot" style="background:transparent;border:2px dashed #8b5cf6;"></span><span class="legend-label">Predicted Price</span>
+                <span class="legend-dot" style="background:#10b981;"></span><span class="legend-label">Actual
+                    Price</span>
+                <span class="legend-dot" style="background:transparent;border:2px dashed #8b5cf6;"></span><span
+                    class="legend-label">Predicted Price</span>
             </div>
             <div class="pred-modal-chart-wrapper">
                 <canvas id="predictionModalChart"></canvas>
@@ -190,4 +226,5 @@
 
     <script src="app.js?v=6"></script>
 </body>
+
 </html>

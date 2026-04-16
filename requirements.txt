@@ -17,4 +17,5 @@ reportlab
 pyautogen<0.3.0
 chromadb
 markdownify
-pypdf./finrobot_repo
+pypdf
+./finrobot_repo
